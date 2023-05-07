@@ -1,5 +1,5 @@
 import { LeakyBucket } from "ts-leaky-bucket";
-import Request from "./request";
+import Request, { isAxiosError } from "./request";
 import { shoper_resources } from "./resources";
 
 export enum AuthMethod {
@@ -39,11 +39,11 @@ export type ShoperResourceMethod =
   | "LIST"
   | "UPDATE";
 
-type ShoperResource = typeof shoper_resources[number]["name"];
+type ShoperResource = (typeof shoper_resources)[number]["name"];
 
 /*
   Some resources are labeled in Shoper documentation as
-  having "LIST" method. However, they don't behave like
+  having a "LIST" method. However, they don't behave like
   other lists. They don't accept an offset, and the response
   isn't wrapped in a pagination object. 
 */
@@ -199,7 +199,11 @@ export class Client {
           yield element;
         }
       } catch (error) {
-        if (error.response && error.response.status === 404) {
+        if (
+          isAxiosError(error) &&
+          error.response &&
+          error.response.status === 404
+        ) {
           return;
         }
         throw error;
@@ -227,7 +231,7 @@ export class Client {
       });
       return resp.data;
     } catch (error) {
-      if (error.response) {
+      if (isAxiosError(error) && error.response) {
         if (error.response.status === 404) {
           return null;
         } else if (error.response.status === 429) {
@@ -265,7 +269,7 @@ export class Client {
       });
       return resp.data;
     } catch (error) {
-      if (error.response) {
+      if (isAxiosError(error) && error.response) {
         if (error.response.status === 404) {
           return null;
         } else if (error.response.status === 429) {
@@ -313,9 +317,8 @@ export class Client {
           expires_in: response_token.expires_in,
           date: Date.now() / 1000,
         };
-      } catch (error) {
-        error.message = "Auth error";
-        throw error;
+      } catch {
+        throw new Error("Auth error");
       }
     } else if (this.config.auth.method === AuthMethod.Token) {
       this.auth_token = {
@@ -324,6 +327,7 @@ export class Client {
         date: Date.now() / 1000,
       };
       // TODO implement refreshing access token
+      throw new Error("Not implemented");
     } else {
       throw new Error("Unknown auth method");
     }
