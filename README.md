@@ -29,21 +29,21 @@ const all_products = await shoper_client.list("products");
 // Update product
 await shoper_client.update("products", 123, {
   translations: {
-    "pl_PL": {
-      name: "Foo Bar Deluxe"
-    }
-  }
+    pl_PL: {
+      name: "Foo Bar Deluxe",
+    },
+  },
 });
 
 // Insert product
 await shoper_client.insert("products", {
   category_id: 1,
   translations: {
-    "pl_PL": {
+    pl_PL: {
       name: "Foo Bar Deluxe",
-      active: true
-    }
-  }
+      active: true,
+    },
+  },
   // more fields go here...
 });
 
@@ -68,7 +68,7 @@ const categories_tree = await shoper_client.get("categories-tree");
 
 ## Supported resources
 
-This client supports all resources listed in Shoper REST API docs (at the time of writing). The API exposes some [additional resources](https://github.com/dreamcommerce/shop-appstore-lib/commit/0c6d308d0075f797a3d938a2b2642081bf79cf50), but because they are undocumented, this client doesn't support them.
+This client supports all resources listed in Shoper REST API docs as of May 2023. The API exposes some [additional resources](https://github.com/dreamcommerce/shop-appstore-lib/commit/0c6d308d0075f797a3d938a2b2642081bf79cf50), but because they are undocumented, this client doesn't support them.
 
 ## Type checking
 

@@ -72,6 +72,14 @@ export const shoper_resources = literally([
     methods: ["DELETE", "GET", "INSERT", "LIST", "UPDATE"],
   },
   {
+    name: "collections-products",
+    methods: ["LIST", "UPDATE"],
+  },
+  {
+    name: "collections",
+    methods: ["DELETE", "GET", "INSERT", "LIST", "UPDATE"],
+  },
+  {
     name: "currencies",
     methods: ["GET", "LIST"],
   },
@@ -106,6 +114,10 @@ export const shoper_resources = literally([
   {
     name: "languages",
     methods: ["GET", "LIST"],
+  },
+  {
+    name: "loyalty-events",
+    methods: ["GET", "INSERT", "LIST"],
   },
   {
     name: "metafield-values",
